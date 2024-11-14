@@ -1,0 +1,26 @@
+{
+    "referer": {
+        "terms": {
+            "field": "json.request.headers.Referer"
+        },
+        "aggs": {
+            "ip_address": {
+                "terms": {
+                    "field": "json.request.client_ip"
+                },
+                "aggs": {
+                    "requests_per_second": {
+                        "date_histogram": {
+                            "field": "@timestamp",
+                            "fixed_interval": "1s",
+                            "min_doc_count": 1,
+                            "order": {
+                                "_key": "desc"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

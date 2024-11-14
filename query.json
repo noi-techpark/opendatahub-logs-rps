@@ -1,0 +1,45 @@
+{
+    "bool": {
+        "must": [
+            {
+                "match": {
+                    "agent.hostname": "ip-172-31-1-28"
+                }
+            },
+            {
+                "match": {
+                    "json.status": "200"
+                }
+            },
+            {
+                "bool": {
+                    "should": [
+                        {
+                            "match": {
+                                "json.request.host": "mobility.api.opendatahub.bz.it"
+                            }
+                        },
+                        {
+                            "match": {
+                                "json.request.host": "mobility.api.opendatahub.com"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "match": {
+                    "json.resp_headers.X-Rate-Limit-Policy": "Referer"
+                }
+            }
+        ],
+        "filter": {
+            "range": {
+                "@timestamp": {
+                    "gte": "2024-10-01T00:00:00.000Z",
+                    "lt": "2024-10-02T00:00:00.000Z"
+                }
+            }
+        }
+    }
+}

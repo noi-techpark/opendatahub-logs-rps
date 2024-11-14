@@ -1,0 +1,35 @@
+{
+    "bool": {
+        "must": [
+            {
+                "match": {
+                    "agent.hostname": "ip-172-31-1-28"
+                }
+            },
+            {
+                "bool": {
+                    "should": [
+                        {
+                            "match": {
+                                "json.request.host": "mobility.api.opendatahub.bz.it"
+                            }
+                        },
+                        {
+                            "match": {
+                                "json.request.host": "mobility.api.opendatahub.com"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "filter": {
+            "range": {
+                "@timestamp": {
+                    "gte": "2024-10-01",
+                    "lte": "2024-10-23"
+                }
+            }
+        }
+    }
+}
