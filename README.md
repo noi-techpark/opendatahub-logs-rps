@@ -1,19 +1,10 @@
 # Processing Logs on Elasticsearch
 
-## Project Description
+## Project Brief
 
-### Get Data from Elasticsearch
-
-1. Connect to Elasticsearch client
-2. Read query body from file
-3. Read aggregation from file
-4. Get buckets from Elasticsearch based on query and aggregation from `filebeat-*` index
-
-### Store Data back into Elasticsearch
-
-1. Store each bucket in `Bucket` object
-2. Convert into dictionary and append into document list
-3. Bulk post document list into Elasticsearch `request-rate` index
+1. Get logs data from Elasticsearch logs index based on generated query and aggregation to time interval of 1 second
+2. Process data into cleaner format using `Bucket` object
+3. Bulk post data into Elasticsearch storage index for every api and policy type
 
 ## How to Install and Run
 
