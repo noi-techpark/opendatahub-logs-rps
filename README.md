@@ -1,26 +1,6 @@
-# open-data-hub-api-rps
+# Processing Logs on Elasticsearch
 
-## Setting up
-
-1. `source .venv/bin/activate`
-2. `python3 -m pip install -r requirements.txt`
-
-## Running Application
-
-1. Once in `.venv` virtual environment, run program using `python3 app.py`
-
-## Installing new packages
-
-1. `pip install <package>`
-2. `python3 -m pip freeze > requirements.txt`
-
-
-## Updates made
-
-- October 2024 -> Referer, Timeseries
-  
-
-## Program Notes
+## Project Description
 
 ### Get Data from Elasticsearch
 
@@ -35,15 +15,25 @@
 2. Convert into dictionary and append into document list
 3. Bulk post document list into Elasticsearch `request-rate` index
 
+## How to Install and Run
 
-## On Elasticsearch
+### Setting up
 
-1. Created index `request-rate`
-2. Access has to be given to index
+1. `source .venv/bin/activate`
+2. `python3 -m pip install -r requirements.txt`
 
-Anonymous has no referer -> need to use another method
+### Installing new packages
 
-## Running Tests
+1. `pip install <package>`
+2. `python3 -m pip freeze > requirements.txt`
+
+### Running Application
+
+1. Change `.env.example` to `.env` and include `ELASTIC_URL` and `API_KEY`
+2. Once in `.venv` virtual environment, run program using `python3 main.py`
+
+### Running Tests
 
 1. Go to `open-data-hub-api-rps`
 2. Run tests `python -m unittest`
+

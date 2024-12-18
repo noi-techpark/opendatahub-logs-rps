@@ -1,13 +1,24 @@
 # --------------------------------------------------------------------------------------------------
 #
-# Note: main.py is the main program that takes in configuration parameters
+# Note: 
+# - main(): the main program that takes in configuration parameters
+#
+# Configuration Parameters:
+# - start_date: UTC Date [String] 
+#               If database date is later than start_date, database date will be taken
+#               If start_date is empty string, database date is taken, otherwise default date is taken
+# - logs_index: Elasticsearch index where logs are stored [String]
+# - storage_index: Elasticsearch index where processed data are stored [String]
+# - apis: types of api [List]
+# - policies_with_referer: policy types that have referer field [List]
+# - policies_without_referer: policy types that do not have referer field [List]
 # --------------------------------------------------------------------------------------------------
 
 
 from dotenv import load_dotenv
 import os
-from datetime import datetime, timedelta
 import time
+import re
 import app
 import logging
 logger = logging.getLogger(__name__)
@@ -25,48 +36,46 @@ ELASTIC_URL = os.getenv("ELASTIC_URL")
     
 logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
 
-policies_without_referer = ["anonymous", "premium", "authenticated basic", "no restriction", "basic"]
-# policies = policies_without_referer + ["referer"]
-policies = ["referer"]
-apis = ["timeseries", "content"]
+start_date = ""
+# start_date = "2024-12-17T00:00:00.000Z"
+
+logs_index = "accesslog-*"
+# logs_index = "filebeat-*"
 storage_index = "request-rate"
+apis = ["timeseries", "content"]
+policies_with_referer = ["referer"]
+policies_without_referer = ["anonymous", "premium", "authenticated basic", "no restriction", "basic"]
 
 ############################################
 
-
-def validate_date(date):
-    if date != "":
-        if len(date) != len("2024-11-01T00:00:00.000Z") or date[-1] != "Z":
-            raise Exception("date not written in UTC format")
-        
         
 def main():
     
-    count = 0
-    date = ""
-    # date = "2024-12-12T00:00:00.000Z"
     try:
-        validate_date(date)
+        app.validate_date(start_date)
     except Exception as e: 
         logger.error("%s", e)
         print("error: ", e)
-
+        return
     
+    # Set while loop logic
+    count = 0
     while count < 1:
-     
-        t0 = time.time()
-        
-        logger.info("starting script")
-        
-        app.run_with_params(date, apis, policies, policies_without_referer, storage_index, API_KEY, ELASTIC_URL)
-        # date, _ = app.round_to_next_day_range(date)
-        # print("Ran ", date)
-
-        t1 = time.time()
-        logger.info("run completed in %.3f seconds", t1-t0)
-        
         count += 1
-        print("Ran round ", count)
+
+        try:
+            t0 = time.time()
+            logger.info("starting script")
+            
+            app.run_with_params(start_date, logs_index, storage_index, apis, policies_with_referer, policies_without_referer, API_KEY, ELASTIC_URL)
+
+            t1 = time.time()
+            logger.info("run completed in %.3f seconds", t1-t0)
+            
+        except Exception as e:
+            logger.error("%s", e)
+            print("error: ", e)
+        
 
 main()
 

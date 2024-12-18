@@ -1,13 +1,14 @@
 # --------------------------------------------------------------------------------------------------
 #
-# Note: request.py handles all external request with Elasticsearch
+# Note: 
+# - request.py handles all external request with Elasticsearch
 #
-# extract_aggregated_data:
+# Functions:
+# - extract_aggregated_data():
 #       - extract buckets from elastic search index based on query and aggregation types
-#
-# get_latest_record:
+# - get_latest_record():
 #       - retrieve the latest record if it exists
-#       - if no reacord in index, return None
+#       - if no record in index, return None
 #
 # --------------------------------------------------------------------------------------------------
 
@@ -19,18 +20,16 @@ logger = logging.getLogger(__name__)
 ############################################
 
 
-def extract_aggregated_data(client, query_body, aggregation):
-    
-    filebeat = "filebeat-*"
+def extract_aggregated_data(client, query_body, aggregation, logs_index):
     
     try:
-        json_data = client.search(index=filebeat, query=query_body, aggs=aggregation, size=0)
+        json_data = client.search(index=logs_index, query=query_body, aggs=aggregation, size=0)
         # size=0 so that original records are not queried
     except Exception as e:
         raise Exception("error in retrieving aggregated data", e)
     
     if json_data["hits"]["total"]["value"] == 0:
-        logger.info("there is no matching data in %s index", filebeat)
+        logger.info("there is no matching data in %s index", logs_index)
         return None
     
     return json_data

@@ -1,16 +1,19 @@
 # --------------------------------------------------------------------------------------------------
 #
-# Note: generate.py generates query file based on
-#       - start date
-#       - end date
-#       - policy type
-#       - api type
-#
-# Steps:
-#       - Reads template query file based on `api`
-#       - Changes the attributes based on the input parameters (`date_start`, `date_end`, `policy`)
-#       - Creates new query files for every call
-#
+# Note: 
+# - generate.py contains functions that help to generate json query files
+#      
+# Functions:
+# - query_file(): called by external functions to generate query file based on query template
+#       - reads template query file based on `api`
+#       - changes the attributes based on the input parameters (`date_start`, `date_end`, `policy`)
+#       - takes into account the following fields
+#          - start date
+#          - end date
+#          - policy type
+#          - API type
+# - generate_by_policy_type: adds policy type into json
+# - read_json_from_file(): read json data from file
 # --------------------------------------------------------------------------------------------------
 
 import json
@@ -30,7 +33,8 @@ def read_json_from(filename):
 
 def query_file(date_start, date_end, policy, api):
     
-    query_body = read_json_from(f"../query-templates/{api}.json")
+    query_template_folder = "../query-templates"
+    query_body = read_json_from(f"{query_template_folder}/{api}.json")
     
     query_body["bool"]["filter"]["range"]["@timestamp"]["gte"] = date_start
     query_body["bool"]["filter"]["range"]["@timestamp"]["lt"] = date_end

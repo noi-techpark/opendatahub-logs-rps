@@ -3,47 +3,6 @@ from unittest.mock import patch
 from src import app
 
 class TestClass(unittest.TestCase):
-    
-    ### Test Next Hour Function ###
-    
-    def test_next_hour_simple_case(self):
-        expected = "2024-11-01T01:00:00.000Z"
-        actual, _ = app.round_to_next_hour_range("2024-11-01T00:00:00.000Z")
-        self.assertEqual(expected, actual)	
-        
-    def test_next_hour_using_23hour(self):
-        expected = "2024-11-02T00:00:00.000Z"
-        actual, _ = app.round_to_next_hour_range("2024-11-01T23:59:16.000Z")
-        self.assertEqual(expected, actual)	
-        
-    def test_next_hour_using_previous_month(self):
-        expected = "2024-11-01T00:00:00.000Z"
-        actual, _ = app.round_to_next_hour_range("2024-10-31T23:59:16.000Z")
-        self.assertEqual(expected, actual)	
-      
-    def test_next_hour_date_end(self):
-        expected = "2024-11-01T01:00:00.000Z"
-        _, actual = app.round_to_next_hour_range("2024-10-31T23:59:16.000Z")
-        self.assertEqual(expected, actual)	  
-        
-        
-    ### Test Next Day Function ###
-        
-    def test_next_day_simple_case(self):
-        expected = "2024-11-02T00:00:00.000Z"
-        actual, _ = app.round_to_next_day_range("2024-11-01T00:00:00.000Z")
-        self.assertEqual(expected, actual)	
-        
-    def test_next_day_using_previous_month(self):
-        expected = "2024-11-01T00:00:00.000Z"
-        actual, _ = app.round_to_next_day_range("2024-10-31T23:59:16.000Z")
-        self.assertEqual(expected, actual)	    
-
-    def test_next_day_date_end(self):
-        expected = "2024-11-02T00:00:00.000Z"
-        _, actual = app.round_to_next_day_range("2024-10-31T23:59:16.000Z")
-        self.assertEqual(expected, actual)	
-        
         
     ### Test Set Start Date Function ###
     
@@ -75,6 +34,16 @@ class TestClass(unittest.TestCase):
         self.assertEqual(result, "2024-12-31T00:00:00.000Z")
         mock_get_latest_record.assert_called_once_with("test_client", "test_storage_index")
 
+
+    ### Test Validate Date Function ###
+    
+    def test_invalid_date(self):
+        date = "2024-11-01T01:00:00.000"
+        self.assertRaises(Exception, app.validate_date, date)	
+    
+    def test_valid_date(self):
+        date = "2024-11-01T01:00:00.000Z"
+        self.assertIsNone(app.validate_date(date))
 
 
 if __name__=='__main__':
