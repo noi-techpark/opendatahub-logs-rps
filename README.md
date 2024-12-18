@@ -41,3 +41,9 @@
 1. Created index `request-rate`
 2. Access has to be given to index
 
+Anonymous has no referer -> need to use another method
+
+## Running Tests
+
+1. Go to `open-data-hub-api-rps`
+2. Run tests `python -m unittest`

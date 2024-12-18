@@ -7,27 +7,37 @@
                 }
             },
             {
+                "match": {
+                    "json.status": "200"
+                }
+            },
+            {
                 "bool": {
                     "should": [
                         {
                             "match": {
-                                "json.request.host": "mobility.api.opendatahub.bz.it"
+                                "json.request.host": "tourism.api.opendatahub.bz.it"
                             }
                         },
                         {
                             "match": {
-                                "json.request.host": "mobility.api.opendatahub.com"
+                                "json.request.host": "tourism.api.opendatahub.com"
                             }
                         }
                     ]
+                }
+            },
+            {
+                "match": {
+                    "json.resp_headers.X-Rate-Limit-Policy": "Referer"
                 }
             }
         ],
         "filter": {
             "range": {
                 "@timestamp": {
-                    "gte": "2024-10-01",
-                    "lte": "2024-10-23"
+                    "gte": "2024-10-31T00:00:00.000Z",
+                    "lt": "2024-11-01T00:00:00.000Z"
                 }
             }
         }
