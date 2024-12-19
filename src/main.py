@@ -20,9 +20,8 @@ import os
 import time
 import re
 import app
+import json
 import logging
-logger = logging.getLogger(__name__)
-
 
 ######## Load Environment Variables ########
 
@@ -31,12 +30,7 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 ELASTIC_URL = os.getenv("ELASTIC_URL")
 
-
 ############## Configurations ##############
-    
-# logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
-ConsoleOutputHandler = logging.StreamHandler()
-logger.addHandler(ConsoleOutputHandler)
 
 start_date = ""
 # start_date = "2024-12-17T00:00:00.000Z"
@@ -49,6 +43,17 @@ policies_with_referer = ["referer"]
 policies_without_referer = ["anonymous", "premium", "authenticated basic", "no restriction", "basic"]
 
 ############################################
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record):
+        return json.dumps({"level": record.levelname, "message": record.getMessage()})
+    
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(JsonFormatter())
+logger.addHandler(handler)
+# logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
 
         
 def main():
