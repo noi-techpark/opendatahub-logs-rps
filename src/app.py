@@ -207,8 +207,8 @@ def run_with_params(date, logs_index, storage_index, apis, policies_with_referer
             logger.info("%s - %s - %d number of buckets extracted from query in %s", api, policy, number_of_buckets, query_filename)
             logger.info("size of document list: %s bytes", sys.getsizeof(document_list))
             
-            # response = helpers.bulk(client, document_list, index=storage_index)
-            # logger.info("saved into %s index with response: %s", storage_index, response)
+            response = helpers.bulk(client, document_list, index=storage_index)
+            logger.info("saved into %s index with response: %s", storage_index, response)
             
             delete_file(query_folder, query_filename)
             logger.info("deleted json query file \"%s\"", query_filename)
