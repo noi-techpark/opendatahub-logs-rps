@@ -34,7 +34,9 @@ ELASTIC_URL = os.getenv("ELASTIC_URL")
 
 ############## Configurations ##############
     
-logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
+# logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
+ConsoleOutputHandler = logging.StreamHandler()
+logger.addHandler(ConsoleOutputHandler)
 
 start_date = ""
 # start_date = "2024-12-17T00:00:00.000Z"
@@ -55,7 +57,6 @@ def main():
         app.validate_date(start_date)
     except Exception as e: 
         logger.error("%s", e)
-        print("error: ", e)
         return
     
     # Set while loop logic
@@ -74,7 +75,6 @@ def main():
             
         except Exception as e:
             logger.error("%s", e)
-            print("error: ", e)
         
 
 main()

@@ -106,7 +106,7 @@ def validate_date(date):
     if date != "":
         pattern_str = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$'
         if not re.match(pattern_str, date):
-            raise Exception("date not written in UTC format")
+            raise Exception("date not written in UTC format: ", date)
         
 
 def round_utc_date_to_next_day(dt_str):
@@ -161,7 +161,7 @@ def run_with_params(date, logs_index, storage_index, apis, policies_with_referer
     date_end = add_days_to_date(1, date_start)
     
     if not validate_date_passed(date_end):
-        raise Exception("end date is later than current date")
+        raise Exception("current date is before end date: ", date_end)
 
     policies = policies_with_referer + policies_without_referer
 
