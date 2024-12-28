@@ -45,15 +45,19 @@ policies_without_referer = ["anonymous", "premium", "authenticated basic", "no r
 ############################################
 
 class JsonFormatter(logging.Formatter):
+    converter = time.localtime
+    def formatTime(self, record, datefmt=None):
+        current_time = self.converter(record.created)
+        return time.asctime(current_time)
     def format(self, record):
-        return json.dumps({"level": record.levelname, "message": record.getMessage()})
+        record.asctime = self.formatTime(record, self.datefmt)
+        return json.dumps({"localtime": record.asctime, "level": record.levelname, "message": record.getMessage()})
     
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
-handler.setFormatter(JsonFormatter())
+handler.setFormatter(JsonFormatter('%(asctime)s - %(levelname)s - %(message)s'))
 logger.addHandler(handler)
-# logging.basicConfig(filename='main.log', format='%(levelname)s: %(asctime)s - %(name)s - %(message)s', level=logging.DEBUG)
 
         
 def main():
